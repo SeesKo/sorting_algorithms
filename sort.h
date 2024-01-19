@@ -2,7 +2,6 @@
 #define SORT_H
 
 /* STANDARD LIBRARY HEADERS */
-#include <stdio.h>
 #include <stddef.h>
 
 
