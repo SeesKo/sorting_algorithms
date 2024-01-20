@@ -3,7 +3,8 @@
 
 /* STANDARD LIBRARY HEADERS */
 #include <stddef.h>
-
+#include <stdlib.h>
+#include <stdio.h>
 
 /* STRUCTS */
 /**
@@ -31,7 +32,15 @@ void quick_sort(int *array, size_t size);
 void quick_sort_recursion(int *array, int low, int high, size_t size);
 int lomuto_partition(int *array, int low, int high, size_t size);
 void shell_sort(int *array, size_t size);
-void swap_nodes(listint_t *a, listint_t *b, listint_t **list);
 void cocktail_sort_list(listint_t **list);
+void swap_nodes(listint_t **list, listint_t *node1, listint_t *node2);
+void counting_sort(int *array, size_t size);
+
+void merge(int *array, int *temp, size_t low, size_t mid, size_t high);
+void merge_sort_recursive(int *array, int *temp, size_t low, size_t high);
+void merge_sort(int *array, size_t size);
+
+void heapify(int *array, size_t size, size_t i, size_t n);
+void heap_sort(int *array, size_t size);
 
 #endif /* SORT_H */
