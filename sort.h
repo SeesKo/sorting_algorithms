@@ -40,7 +40,7 @@ void merge(int *array, int *temp, size_t low, size_t mid, size_t high);
 void merge_sort_recursive(int *array, int *temp, size_t low, size_t high);
 void merge_sort(int *array, size_t size);
 
-void heapify(int *array, size_t size, size_t i, size_t n);
+void make_heap(int *array, size_t size, size_t i, size_t n);
 void heap_sort(int *array, size_t size);
 
 #endif /* SORT_H */
