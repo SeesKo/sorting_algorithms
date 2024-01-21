@@ -21,7 +21,7 @@ void cocktail_sort_list(listint_t **list)
 		{
 			if (current->n > current->next->n)
 			{
-				swap_nodes(list, current, current->next);
+				swapNode(list, current, current->next);
 				print_list(*list);
 				swapped = 1;
 			}
@@ -37,7 +37,7 @@ void cocktail_sort_list(listint_t **list)
 		{
 			if (current->n < current->prev->n)
 			{
-				swap_nodes(list, current->prev, current);
+				swapNode(list, current->prev, current);
 				print_list(*list);
 				swapped = 1;
 			}
@@ -48,12 +48,12 @@ void cocktail_sort_list(listint_t **list)
 }
 
 /**
- * swap_nodes - Swaps 2 nodes in a doubly linked list.
+ * swapNode - Swaps 2 nodes in a doubly linked list.
  * @list: Double pointer to the head of the linked list.
  * @node1: Pointer to the first node to be swapped.
  * @node2: Pointer to the second node to be swapped.
  */
-void swap_nodes(listint_t **list, listint_t *node1, listint_t *node2)
+void swapNode(listint_t **list, listint_t *node1, listint_t *node2)
 {
 	if (node1->prev != NULL)
 		node1->prev->next = node2;
