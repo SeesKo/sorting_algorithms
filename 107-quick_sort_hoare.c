@@ -80,3 +80,4 @@ void quick_sort_hoare(int *array, size_t size)
 
     quicksort(array, 0, size - 1, size);
 }
+
