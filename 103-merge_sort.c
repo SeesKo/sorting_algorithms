@@ -24,10 +24,7 @@ void merge(int *array, size_t l, size_t m, size_t r)
     right = malloc(n2 * sizeof(int));
 
     if (left == NULL || right == NULL)
-    {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
-    }
+	    exit(EXIT_FAILURE);
 
     /* Copy data to temporary arrays left[] and right[] */
     for (i = 0; i < n1; i++)
