@@ -1,6 +1,39 @@
 #include "sort.h"
 
 /**
+ * merge_subarrays - Merge two sorted subarrays into one.
+ * @array: The array to be merged.
+ * @l: Index of the left subarray.
+ * @m: Index of the middle point.
+ * @r: Index of the right subarray.
+ * @temp_array: Temporary array for merging.
+ */
+void merge_subarrays(int *array, size_t l, size_t m, size_t r, int *temp_array)
+{
+    size_t i = l, j = m + 1, k = 0;
+
+    while (i <= m && j <= r)
+    {
+        temp_array[k++] = (array[i] <= array[j]) ? array[i++] : array[j++];
+    }
+
+    while (i <= m)
+    {
+        temp_array[k++] = array[i++];
+    }
+
+    while (j <= r)
+    {
+        temp_array[k++] = array[j++];
+    }
+
+    for (i = 0; i < k; i++)
+    {
+        array[l + i] = temp_array[i];
+    }
+}
+
+/**
  * merge - Merge two subarrays of array[].
  * @array: The array to be merged.
  * @l: Index of the left subarray.
@@ -9,7 +42,6 @@
  */
 void merge(int *array, size_t l, size_t m, size_t r)
 {
-    size_t i, j, k;
     size_t n1 = m - l + 1;
     size_t n2 = r - m;
     int *temp_array;
@@ -25,44 +57,7 @@ void merge(int *array, size_t l, size_t m, size_t r)
     if (temp_array == NULL)
         exit(EXIT_FAILURE);
 
-    /* Merge the temporary arrays back into array[l..r] */
-    i = 0;
-    j = 0;
-    k = 0;
-    while (i < n1 && j < n2)
-    {
-        if (array[l + i] <= array[m + 1 + j])
-        {
-            temp_array[k] = array[l + i];
-            i++;
-        }
-        else
-        {
-            temp_array[k] = array[m + 1 + j];
-            j++;
-        }
-        k++;
-    }
-
-    /* Copy the remaining elements of left[], if there are any */
-    while (i < n1)
-    {
-        temp_array[k] = array[l + i];
-        i++;
-        k++;
-    }
-
-    /* Copy the remaining elements of right[], if there are any */
-    while (j < n2)
-    {
-        temp_array[k] = array[m + 1 + j];
-        j++;
-        k++;
-    }
-
-    /* Copy the merged elements back to the original array */
-    for (i = 0; i < n1 + n2; i++)
-        array[l + i] = temp_array[i];
+    merge_subarrays(array, l, m, r, temp_array);
 
     /* Print the merged result */
     printf("[Done]: ");
@@ -71,7 +66,6 @@ void merge(int *array, size_t l, size_t m, size_t r)
     /* Free the temporary array */
     free(temp_array);
 }
-
 
 /**
  * merge_sort_recursive - Recursive function to perform Merge Sort.
