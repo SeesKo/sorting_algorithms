@@ -12,12 +12,12 @@ void bitonic_sort(int *array, size_t size)
     if (array == NULL || size < 2)
         return;
 
-    printf("Merging [1/%lu] (UP):\n", size);
+    printf("Merging [%lu/%lu] (UP):\n", size, size);
     print_array(array, size);
 
     bitonic_recursive(array, size, 1);
 
-    printf("\nResult [1/%lu] (UP):\n", size);
+    printf("\nResult [%lu/%lu] (UP):\n", size, size);
     print_array(array, size);
 }
 
