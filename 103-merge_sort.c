@@ -12,54 +12,33 @@ void merge(int *array, size_t l, size_t m, size_t r)
     size_t i, j, k;
     size_t n1 = m - l + 1;
     size_t n2 = r - m;
-    int *left, *right;
+    int *temp_array;
 
     printf("Merging...\n[left]: ");
-    for (i = 0; i < n1; i++)
-    {
-        printf("%d", array[l + i]);
-        if (i < n1 - 1)
-            printf(", ");
-    }
-    printf("\n[right]: ");
-    for (j = 0; j < n2; j++)
-    {
-        printf("%d", array[m + 1 + j]);
-        if (j < n2 - 1)
-            printf(", ");
-    }
-    printf("\n");
+    print_array(array + l, n1);
+    printf("[right]: ");
+    print_array(array + m + 1, n2);
 
-    /* Create temporary arrays */
-    left = malloc(n1 * sizeof(int));
-    right = malloc(n2 * sizeof(int));
+    /* Create a single temporary array to hold both left and right subarrays */
+    temp_array = malloc((n1 + n2) * sizeof(int));
 
-    if (left == NULL || right == NULL)
-    {
-        fprintf(stderr, "Memory allocation failed\n");
+    if (temp_array == NULL)
         exit(EXIT_FAILURE);
-    }
-
-    /* Copy data to temporary arrays left[] and right[] */
-    for (i = 0; i < n1; i++)
-        left[i] = array[l + i];
-    for (j = 0; j < n2; j++)
-        right[j] = array[m + 1 + j];
 
     /* Merge the temporary arrays back into array[l..r] */
     i = 0;
     j = 0;
-    k = l;
+    k = 0;
     while (i < n1 && j < n2)
     {
-        if (left[i] <= right[j])
+        if (array[l + i] <= array[m + 1 + j])
         {
-            array[k] = left[i];
+            temp_array[k] = array[l + i];
             i++;
         }
         else
         {
-            array[k] = right[j];
+            temp_array[k] = array[m + 1 + j];
             j++;
         }
         k++;
@@ -68,7 +47,7 @@ void merge(int *array, size_t l, size_t m, size_t r)
     /* Copy the remaining elements of left[], if there are any */
     while (i < n1)
     {
-        array[k] = left[i];
+        temp_array[k] = array[l + i];
         i++;
         k++;
     }
@@ -76,25 +55,23 @@ void merge(int *array, size_t l, size_t m, size_t r)
     /* Copy the remaining elements of right[], if there are any */
     while (j < n2)
     {
-        array[k] = right[j];
+        temp_array[k] = array[m + 1 + j];
         j++;
         k++;
     }
 
+    /* Copy the merged elements back to the original array */
+    for (i = 0; i < n1 + n2; i++)
+        array[l + i] = temp_array[i];
+
     /* Print the merged result */
     printf("[Done]: ");
-    for (i = 0; i < n1 + n2; i++)
-    {
-        printf("%d", array[l + i]);
-        if (i < n1 + n2 - 1)
-            printf(", ");
-    }
-    printf("\n");
+    print_array(array + l, n1 + n2);
 
-    /* Free the temporary arrays */
-    free(left);
-    free(right);
+    /* Free the temporary array */
+    free(temp_array);
 }
+
 
 /**
  * merge_sort_recursive - Recursive function to perform Merge Sort.
