@@ -15,16 +15,30 @@ void merge(int *array, size_t l, size_t m, size_t r)
     int *left, *right;
 
     printf("Merging...\n[left]: ");
-    print_array(array + l, n1);
-    printf("[right]: ");
-    print_array(array + m + 1, n2);
+    for (i = 0; i < n1; i++)
+    {
+        printf("%d", array[l + i]);
+        if (i < n1 - 1)
+            printf(", ");
+    }
+    printf("\n[right]: ");
+    for (j = 0; j < n2; j++)
+    {
+        printf("%d", array[m + 1 + j]);
+        if (j < n2 - 1)
+            printf(", ");
+    }
+    printf("\n");
 
     /* Create temporary arrays */
     left = malloc(n1 * sizeof(int));
     right = malloc(n2 * sizeof(int));
 
     if (left == NULL || right == NULL)
-	    exit(EXIT_FAILURE);
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
 
     /* Copy data to temporary arrays left[] and right[] */
     for (i = 0; i < n1; i++)
@@ -69,7 +83,13 @@ void merge(int *array, size_t l, size_t m, size_t r)
 
     /* Print the merged result */
     printf("[Done]: ");
-    print_array(array + l, n1 + n2);
+    for (i = 0; i < n1 + n2; i++)
+    {
+        printf("%d", array[l + i]);
+        if (i < n1 + n2 - 1)
+            printf(", ");
+    }
+    printf("\n");
 
     /* Free the temporary arrays */
     free(left);
