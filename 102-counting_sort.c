@@ -1,53 +1,50 @@
 #include "sort.h"
 
 /**
- * counting_sort - Sorts an array of integers using counting sort algorithm
- * @array: The array to be sorted
- * @size: Number of elements in the array
+ * counting_sort - Sorts an array of integers in ascending
+ * order using the Counting sort algorithm.
+ * @array: The array to be sorted.
+ * @size: Number of elements in the array.
  */
 void counting_sort(int *array, size_t size)
 {
-    int max;
-    int *counting_array;
-    size_t i, j;
+	int max, *counting_array, j, index;
+	size_t i;
 
-    if (array == NULL || size < 2)
-        return;
+	if (array == NULL || size < 2)
+		return;
 
-    /* Find the maximum value in the array */
-    max = array[0];
-    for (i = 1; i < size; i++)
-    {
-        if (array[i] > max)
-            max = array[i];
-    }
+	/* Finding the maximum value in the array */
+	max = array[0];
+	for (i = 1; i < size; ++i)
+	{
+		if (array[i] > max)
+			max = array[i];
+	}
+	/* Creating and initialize the counting array */
+	counting_array = malloc((max + 1) * sizeof(int));
+	if (counting_array == NULL)
+		return;
 
-    /* Create and initialize the counting array */
-    counting_array = malloc((max + 1) * sizeof(int));
-    if (counting_array == NULL)
-        return;
+	for (j = 0; j <= max; ++j)
+		counting_array[j] = 0;
+	/* Counting occurrences of each element in the array */
+	for (i = 0; i < size; ++i)
+		counting_array[array[i]]++;
 
-    for (i = 0; i <= (size_t)max; i++)
-        counting_array[i] = 0;
+	/* Printing the counting array */
+	print_array(counting_array, max + 1);
 
-    /* Populate the counting array with the count of each element */
-    for (i = 0; i < size; i++)
-        counting_array[array[i]]++;
-
-    /* Print the counting array */
-    print_array(counting_array, max + 1);
-
-    /* Update the original array with sorted values */
-    for (i = 0, j = 0; j <= (size_t)max; j++)
-    {
-        while (counting_array[j] > 0)
-        {
-            array[i++] = (int)j;
-            counting_array[j]--;
-        }
-    }
-
-    /* Free the counting array */
-    free(counting_array);
+	/* Updating the array with sorted values */
+	index = 0;
+	for (j = 0; j <= max; ++j)
+	{
+		while (counting_array[j] > 0)
+		{
+			array[index++] = j;
+			counting_array[j]--;
+		}
+	}
+	/* Freeing dynamically allocated memory */
+	free(counting_array);
 }
-
