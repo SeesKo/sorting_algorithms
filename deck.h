@@ -48,6 +48,5 @@ typedef struct deck_node_s
 } deck_node_t;
 
 void sort_deck(deck_node_t **deck);
-int compare_strings(const char *str1, const char *str2);
 
 #endif /* DECK_H */
