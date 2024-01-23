@@ -1,13 +1,13 @@
 #include "deck.h"
 
 /**
- * compare_strings - Compares 2 strings.
- * @str1: 1st string.
- * @str2: 2nd string.
- * Return: Integer < than, equal to,
- * or > than 0 if str1 is found.
+ * custom_strcmp - Compare two strings without using strcmp
+ * @str1: First string
+ * @str2: Second string
+ * Return: Integer less than, equal to, or greater than zero if str1 is found,
+ * respectively, to be less than, to match, or be greater than str2.
  */
-int compare_strings(const char *str1, const char *str2)
+int custom_strcmp(const char *str1, const char *str2)
 {
 	while (*str1 && (*str1 == *str2))
 	{
@@ -15,24 +15,40 @@ int compare_strings(const char *str1, const char *str2)
 		str2++;
 	}
 
-	return (*(unsigned char *)str1 - *(unsigned char *)str2);
+	return (*str1 - *str2);
 }
 
 /**
- * compare_cards - Compare 2 cards for sorting.
- * @a: Pointer to the 1st card.
- * @b: Pointer to the 2nd card.
- * Return: Integer < than, equal to, or > than 0 if a is found.
+ * compare_cards - Compare two cards for sorting
+ * @a: Pointer to the first card
+ * @b: Pointer to the second card
+ * Return: Integer less than, equal to, or greater than zero if a is found,
+ * respectively, to be less than, to match, or be greater than b.
  */
 int compare_cards(const void *a, const void *b)
 {
+	int i, value_a, value_b;
 	const card_t *card_a = (*(const deck_node_t **)a)->card;
 	const card_t *card_b = (*(const deck_node_t **)b)->card;
+	const char *order[] = {"Ace", "2", "3", "4", "5", "6", "7",
+		"8", "9", "10", "Jack", "Queen", "King"};
 
 	if (card_a->kind != card_b->kind)
 		return (card_a->kind - card_b->kind);
 
-	return (compare_strings(card_a->value, card_b->value));
+	value_a = 0;
+	value_b = 0;
+
+	for (i = 0; i < 13; i++)
+	{
+		if (custom_strcmp(card_a->value, order[i]) == 0)
+			value_a = i;
+
+		if (custom_strcmp(card_b->value, order[i]) == 0)
+			value_b = i;
+	}
+
+	return (value_a - value_b);
 }
 
 /**
@@ -42,9 +58,9 @@ int compare_cards(const void *a, const void *b)
 void sort_deck(deck_node_t **deck)
 {
 	size_t deck_size = 52;
-	size_t i;
 	deck_node_t *deck_array[52];
 	deck_node_t *current = *deck;
+	size_t i;
 
 	if (!deck || !*deck || deck_size < 2)
 		return;
