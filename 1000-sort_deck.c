@@ -1,13 +1,13 @@
 #include "deck.h"
 
 /**
- * custom_strcmp - Compare two strings without using strcmp
- * @str1: First string
- * @str2: Second string
- * Return: Integer less than, equal to, or greater than zero if str1 is found,
- * respectively, to be less than, to match, or be greater than str2.
+ * str_cmp - Compares 2 strings.
+ * @str1: 1st string.
+ * @str2: 2nd string.
+ * Return: Integer < than, equal to, or > than
+ * 0 if str1 is found.
  */
-int custom_strcmp(const char *str1, const char *str2)
+int str_cmp(const char *str1, const char *str2)
 {
 	while (*str1 && (*str1 == *str2))
 	{
@@ -19,13 +19,13 @@ int custom_strcmp(const char *str1, const char *str2)
 }
 
 /**
- * compare_cards - Compare two cards for sorting
- * @a: Pointer to the first card
- * @b: Pointer to the second card
- * Return: Integer less than, equal to, or greater than zero if a is found,
- * respectively, to be less than, to match, or be greater than b.
+ * card_cmp - Compares 2 cards for sorting.
+ * @a: Pointer to the 1st card.
+ * @b: Pointer to the 2nd card.
+ * Return: Integer < than, equal to, or > than
+ * 0 if a is found.
  */
-int compare_cards(const void *a, const void *b)
+int card_cmp(const void *a, const void *b)
 {
 	int i, value_a, value_b;
 	const card_t *card_a = (*(const deck_node_t **)a)->card;
@@ -41,10 +41,10 @@ int compare_cards(const void *a, const void *b)
 
 	for (i = 0; i < 13; i++)
 	{
-		if (custom_strcmp(card_a->value, order[i]) == 0)
+		if (str_cmp(card_a->value, order[i]) == 0)
 			value_a = i;
 
-		if (custom_strcmp(card_b->value, order[i]) == 0)
+		if (str_cmp(card_b->value, order[i]) == 0)
 			value_b = i;
 	}
 
@@ -52,15 +52,15 @@ int compare_cards(const void *a, const void *b)
 }
 
 /**
- * sort_deck - Sorts a deck of cards in ascending order.
+ * sort_deck - Sorts a deck of cards.
  * @deck: Pointer to the head of the deck.
  */
 void sort_deck(deck_node_t **deck)
 {
 	size_t deck_size = 52;
+	size_t i;
 	deck_node_t *deck_array[52];
 	deck_node_t *current = *deck;
-	size_t i;
 
 	if (!deck || !*deck || deck_size < 2)
 		return;
@@ -71,7 +71,7 @@ void sort_deck(deck_node_t **deck)
 		current = current->next;
 	}
 
-	qsort(deck_array, deck_size, sizeof(deck_node_t *), compare_cards);
+	qsort(deck_array, deck_size, sizeof(deck_node_t *), card_cmp);
 
 	for (i = 0; i < deck_size - 1; i++)
 	{
