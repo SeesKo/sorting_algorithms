@@ -1,78 +1,114 @@
 #include "deck.h"
-
+#include <stdio.h>
 /**
- * compare_strings - Compare two strings
- * @str1: First string
- * @str2: Second string
- * Return: Integer less than, equal to, or greater than zero if str1 is found,
- * respectively, to be less than, to match, or be greater than str2.
+ *_strcmp - compare two strings
+ *@str1: string
+ *@str2: string
+ *Return: 1 str1 and str2 is equal, 0 they are not equal
  */
-int compare_strings(const char *str1, const char *str2)
+int _strcmp(const char *str1, char *str2)
 {
-    while (*str1 && (*str1 == *str2))
-    {
-        str1++;
-        str2++;
-    }
+	size_t i = 0;
 
-    return *(unsigned char *)str1 - *(unsigned char *)str2;
+	if (str1 == '\0')
+		return (0);
+	while (str1[i])
+	{
+		if (str1[i] != str2[i])
+			return (0);
+		i++;
+	}
+	if (str1[i] == '\0' && str2[i])
+		return (0);
+	return (1);
+}
+/**
+ * get_card_position - return the position based on card you put in
+ * @node: represent the card
+ * Return: return the card position
+ */
+int get_card_position(deck_node_t *node)
+{
+	int value;
+
+	value = (*node).card->value[0] - '0';
+	if (value < 50 || value > 57)
+	{
+		if (_strcmp((*node).card->value, "Ace") == 1)
+			value = 1;
+		else if (_strcmp((*node).card->value, "10") == 1)
+			value = 10;
+		else if (_strcmp((*node).card->value, "Jack") == 1)
+			value = 11;
+		else if (_strcmp((*node).card->value, "Queen") == 1)
+			value = 12;
+		else if (_strcmp((*node).card->value, "King") == 1)
+			value = 13;
+	}
+	value += (*node).card->kind * 13;
+	return (value);
+}
+/**
+ *swap_card - swap a card for his previous one
+ *@card: card
+ *@deck: card deck
+ *Return: return a pointer to a card which was enter it
+ */
+deck_node_t *swap_card(deck_node_t *card, deck_node_t **deck)
+{
+	deck_node_t *back = card->prev, *current = card;
+	/*NULL, 19, 48, 9, 71, 13, NULL*/
+
+	back->next = current->next;
+	if (current->next)
+		current->next->prev = back;
+	current->next = back;
+	current->prev = back->prev;
+	back->prev = current;
+	if (current->prev)
+		current->prev->next = current;
+	else
+		*deck = current;
+	return (current);
 }
 
 /**
- * compare_cards - Compare two cards for sorting
- * @a: Pointer to the first card
- * @b: Pointer to the second card
- * Return: Integer less than, equal to, or greater than zero if a is found,
- * respectively, to be less than, to match, or be greater than b.
+ * insertion_sort_deck - function that sorts a doubly linked deck
+ * of integers in ascending order using the Insertion sort algorithm
+ * @deck: Dobule linked deck to sort
  */
-int compare_cards(const void *a, const void *b)
+void insertion_sort_deck(deck_node_t **deck)
 {
-    const card_t *card_a = (*(const deck_node_t **)a)->card;
-    const card_t *card_b = (*(const deck_node_t **)b)->card;
+	int value_prev, value_current;
+	deck_node_t *node;
 
-    if (card_a->kind != card_b->kind)
-        return card_a->kind - card_b->kind;
+	if (deck == NULL || (*deck)->next == NULL)
+		return;
+	node = (*deck)->next;
+	while (node)
+	{
+		/* preparing the previous value */
+		if (node->prev)
+		{
+			value_prev = get_card_position((node->prev));
+			value_current = get_card_position(node);
+		}
+		while ((node->prev) && (value_prev > value_current))
+		{
+			value_prev = get_card_position((node->prev));
+			value_current = get_card_position(node);
+			node = swap_card(node, deck);
 
-    /* Special handling for "Ace" and "10" values */
-    if (card_a->value[0] == 'A' && card_b->value[0] == '1')
-        return 1;  /* "Ace" comes after "10" */
-    else if (card_a->value[0] == '1' && card_b->value[0] == 'A')
-        return -1; /* "10" comes before "Ace" */
-
-    return compare_strings(card_a->value, card_b->value);
+		}
+		node = node->next;
+	}
 }
-
 /**
- * sort_deck - Sorts a deck of cards in ascending order.
- * @deck: Pointer to the head of the deck.
+ * sort_deck - sort a deck you put in using
+ * insertion sort algorithm
+ * @deck: deck
  */
 void sort_deck(deck_node_t **deck)
 {
-    size_t deck_size = 52;
-    deck_node_t *deck_array[52];
-    deck_node_t *current = *deck;
-    size_t i;
-
-    if (!deck || !*deck || deck_size < 2)
-        return;
-
-    for (i = 0; i < deck_size; i++)
-    {
-        deck_array[i] = current;
-        current = current->next;
-    }
-
-    qsort(deck_array, deck_size, sizeof(deck_node_t *), compare_cards);
-
-    for (i = 0; i < deck_size - 1; i++)
-    {
-        deck_array[i]->next = deck_array[i + 1];
-        deck_array[i + 1]->prev = deck_array[i];
-    }
-
-    deck_array[0]->prev = NULL;
-    deck_array[deck_size - 1]->next = NULL;
-
-    *deck = deck_array[0];
+	insertion_sort_deck(deck);
 }
-
